@@ -1,184 +1,365 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User-Agent Generator</title>
+    <title>Advanced UA Generator</title>
+        <link rel="icon" type="image/png" href="https://cdn.dribbble.com/users/7549673/screenshots/17206704/media/1210a9d0ec8af427967e735935861eeb.png?resize=400x300&vertical=center" />
     <style>
-        /* General Styles */
+        :root {
+            --primary-color: #00adb5;
+            --secondary-color: #ff5722;
+            --background: linear-gradient(135deg, #2d4059 0%, #222831 100%);
+            --copy-color: #66bb6a;
+            --copy-color-hover: #4caf50;
+             --copy-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>');
+
+        }
+
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-            color: #333;
+            padding: 2rem;
+            min-height: 100vh;
+            background: var(--background);
+            color: #eee;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
         }
+
         .container {
-            background: #fff;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            max-width: 900px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 2rem;
             width: 100%;
-            text-align: center;
-            animation: fadeIn 1s ease-out;
+            max-width: 1000px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
         }
+
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            color: #4CAF50;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+            font-size: 2.8rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
-        p {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            color: #555;
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        button:hover {
-            background-color: #45a049;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-        }
-        button:active {
-            transform: translateY(0);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        input[type="text"] {
-            width: 80%;
-            padding: 12px;
-            margin-top: 15px;
-            font-size: 1.1rem;
-            border: 2px solid #ddd;
+
+        select, button {
+            padding: 12px 20px;
             border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1rem;
             transition: all 0.3s ease;
-            margin-bottom: 20px;
         }
-        input[type="text"]:focus {
-            border-color: #4CAF50;
-            outline: none;
+        /* Estilo específico para el select */
+        select {
+            background-color: #333;
+            color: #fff;
+            border-color: #555;
+            -webkit-appearance: none;
+             -moz-appearance: none;
+             appearance: none;
+             background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+             background-repeat: no-repeat;
+            background-position: right 10px center;
+           padding-right: 30px;
         }
-        .result {
-            font-size: 1.2rem;
-            color: #4CAF50;
-            margin-top: 20px;
-            animation: fadeIn 1s ease-out;
-        }
-        .error {
-            color: red;
-        }
-        .model-box {
+
+
+        button {
+            background: var(--primary-color);
+            cursor: pointer;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
-            margin-top: 30px;
+            gap: 0.5rem;
+            justify-content: center;
         }
-        .model-box h2 {
-            font-size: 1.5rem;
-            color: #333;
+
+        button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
         }
-        .model-box .model-text {
-            font-size: 1rem;
-            color: #666;
-            margin-top: 5px;
+
+        .user-agent-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
         }
-        .footer {
-            margin-top: 30px;
-            font-size: 1rem;
-            color: #999;
-            animation: fadeIn 1s ease-out;
+
+        .user-agent-box textarea {
+            width: 96%;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            color: #fff;
+            font-family: monospace;
+            resize: vertical;
+            min-height: 100px;
         }
-        .footer a {
-            text-decoration: none;
-            color: #4CAF50;
-            font-weight: bold;
+
+        .copy-btn {
+            position: absolute;
+            top: -10px;
+            right: 10px;
+            padding: 8px 12px;
+            background: var(--copy-color);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+            transition: background-color 0.3s ease;
+             overflow: hidden; /* Clip the gradient to the button's border */
+            position: relative;
+
         }
-        /* Animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
+
+        .copy-btn:hover {
+             background-color: var(--copy-color-hover);
+
+
+        }
+
+
+        .copy-btn::before {
+           content: "";
+             display: inline-block;
+            width: 1.2em; /* Adjust size of the icon as needed */
+             height: 1.2em;
+              margin-right: 5px;
+             background-image: var(--copy-icon);
+                background-repeat: no-repeat;
+                 background-position: center;
+             background-size: contain;
+
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+        .copy-btn.copied::before{
+        content: "✅";
+            background-image: none;
+            font-size: 1.5em;
+            margin-right: 0;
+        }
+
+        .copy-btn span {
+            display: inline-block; /* Use inline-block instead of block */
+        }
+
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .controls {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>User-Agent Generator</h1>
-        <p>Generate Xiaomi User-Agents with Bromite Browser versions.</p>
-        <button id="generateBtn">Generate User-Agent</button>
-        <div class="model-box">
-            <h2>Generated User-Agent 1:</h2>
-            <input type="text" id="userAgentInput1" readonly placeholder="Your generated User-Agent will appear here...">
-            <h2>Generated User-Agent 2:</h2>
-            <input type="text" id="userAgentInput2" readonly placeholder="Your generated User-Agent will appear here...">
+        <h1>🔍 Advanced UA Generator</h1>
+
+        <div class="controls">
+            <select id="deviceType">
+                <option value="mobile">📱 Mobile</option>
+                <option value="tablet">💻 Tablet</option>
+                <option value="desktop">🖥 Desktop</option>
+            </select>
+
+            <select id="brand">
+                <option value="random">🎲 Random Brand</option>
+                <option value="huawei">Huawei</option>
+                <option value="tesla">Tesla</option>
+                <option value="samsung">Samsung</option>
+                <option value="xiaomi">Xiaomi</option>
+                <option value="apple">Apple</option>
+            </select>
+
+            <select id="browser">
+                <!-- 25 navegadores incluyendo opciones chinas y poco comunes -->
+                <option value="uc">UC Browser</option>
+                <option value="qq">QQ Browser</option>
+                <option value="baidu">Baidu Spark</option>
+                <option value="liebao">LieBao</option>
+                <option value="quark">Quark</option>
+                <option value="sougou">Sougou</option>
+                <option value="mi">Mi Browser</option>
+                <option value="oppo">Oppo Browser</option>
+                <option value="vivo">Vivo Browser</option>
+                <option value="huawei">Huawei Browser</option>
+                <option value="360">360 Secure</option>
+                <option value="maxthon">Maxthon</option>
+                <option value="cheetah">Cheetah</option>
+                <option value="dolphin">Dolphin</option>
+                <option value="duckduckgo">DuckDuckGo</option>
+                <option value="brave">Brave</option>
+                <option value="samsung">Samsung Internet</option>
+                <option value="yandex">Yandex</option>
+                <option value="opera">Opera Crypto</option>
+                <option value="focus">Firefox Focus</option>
+                <option value="tor">Tor Browser</option>
+                <option value="puffin">Puffin</option>
+                <option value="kiwi">Kiwi</option>
+                <option value="via">Via</option>
+                <option value="chrome">Chrome</option>
+            </select>
+
+            <button id="generateBtn">⚡ Generate UA</button>
         </div>
-        <div class="result" id="result"></div>
-        <div class="footer">
-            <p>Made with ❤️ by <a href="https://www.youtube.com/watch?v=YixyC1AiWWQ" target="_blank">EvannescencE</a></p>
+
+        <div class="user-agent-box">
+           <button class="copy-btn" onclick="copyUA(1)"><span>Copy</span></button>
+            <textarea id="ua1" readonly></textarea>
+        </div>
+
+        <div class="user-agent-box">
+           <button class="copy-btn" onclick="copyUA(2)"><span>Copy</span></button>
+            <textarea id="ua2" readonly></textarea>
         </div>
     </div>
+
 <script>
-    const XIAOMI_MODELS = [
-        "M2011K2G", "M2101K7BNY", "M2102J20SG", "M2012K11AG", "M2010J19CG",
-        "M2101K6G", "M2006C3MII", "M2007J17G", "M2101K9G", "M2011J18C",
-        "M2101J9Z", "M2010J19C", "M2007J3SY", "M2103K19G", "M2101K6P",
-        "M1906G7I", "M2004J7AC", "M2004J5BC", "M2001J7B", "M2006J10C",
-        "M1908F1XE", "M1905F1G", "M1906F9S", "M2011K1G", "M2019A3C",
-        "M2001C3MA", "M1908C3IC", "M2103K19", "M2007J20G", "M2006J9Y",
-        "M2101J9Y", "M2003J6I", "M1903F2A", "M2004J9G", "M1908F3BG",
-        "M1906G7B", "M1908F1B", "M2003J6T", "M2006J3Z", "M1901F9S",
-        "M1905G9Y", "M2104J19Y", "M2004J9Z", "M2011J10Y", "M2102J20Y"
-    ];
-    const BROMITE_VERSIONS = [
-        "108.0.5359.156", "106.0.5249.72", "104.0.5112.102", "102.0.5005.125",
-        "100.0.4896.75", "98.0.4758.97", "96.0.4664.45", "94.0.4606.82",
-        "92.0.4515.131", "90.0.4430.98"
-    ];
+    const DEVICES = {
+        mobile: {
+            huawei: ['NOH-NX9', 'ANA-AN00', 'JEF-AN00', 'CDY-AN95', 'HMA-AL00'],
+            tesla: ['Model Pi', 'Model Phone S', 'CyberPhone X', 'T-OS 1.0', 'Tesla T1'],
+            samsung: ['SM-G998B', 'SM-S911B', 'SM-F946B', 'SM-A546E', 'SM-M536B'],
+            xiaomi: ['2304FPN6DG', '2210132C', '2109119DI', '2203121C', '2112123AC'],
+            apple: ['iPhone15,3', 'iPhone14,2', 'iPhone13,4', 'iPhone12,3', 'iPhone11,8']
+        },
+        tablet: {
+            huawei: ['MRX-AL09', 'AGS3-L09', 'BAH3-L09', 'JDN2-L09', 'KOB2-L09'],
+            samsung: ['SM-X810', 'SM-X710', 'SM-T970', 'SM-P615', 'SM-T735'],
+            apple: ['iPad13,11', 'iPad14,1', 'iPad12,2', 'iPad11,4', 'iPad8,6']
+        },
+        desktop: {
+            windows: ['Windows NT 12.0', 'Windows NT 11.0', 'Windows NT 10.0'],
+            macos: ['Macintosh; macOS 14.2', 'Macintosh; macOS 13.5', 'Macintosh; macOS 12.6'],
+            linux: ['X11; Linux x86_64', 'X11; Ubuntu 22.04', 'X11; Fedora 38']
+        }
+    };
+
+    const BROWSERS = {
+        uc: { versions: ['15.8.9.1212', '14.7.7.1121', '13.5.5.1001'], template: 'UCBrowser/{version}' },
+        qq: { versions: ['12.3.7.456', '11.2.6.345', '10.1.5.234'], template: 'MQQBrowser/{version}' },
+        baidu: { versions: ['3.5.12.258', '3.4.11.247', '3.3.10.236'], template: 'BaiduSpark/{version}' },
+        liebao: { versions: ['9.8.2012', '8.7.1911', '7.6.1810'], template: 'LieBaoFast/{version}' },
+        quark: { versions: ['4.6.3.201', '4.5.2.198', '4.4.1.195'], template: 'Quark/{version}' },
+        sougou: { versions: ['9.8.0.9012', '8.7.0.8001', '7.6.0.7005'], template: 'SogouMobileBrowser/{version}' },
+        mi: { versions: ['14.8.6', '13.7.5', '12.6.4'], template: 'MiuiBrowser/{version}' },
+        oppo: { versions: ['12.5.8', '11.4.7', '10.3.6'], template: 'OppoBrowser/{version}' },
+        vivo: { versions: ['10.8.2.100', '9.7.1.90', '8.6.0.80'], template: 'VivoBrowser/{version}' },
+        huawei: { versions: ['14.0.8.301', '13.0.7.295', '12.0.6.289'], template: 'HuaweiBrowser/{version}' },
+        '360': { versions: ['13.2.1.1000', '12.1.0.900', '11.0.9.800'], template: '360SE/{version}' },
+        maxthon: { versions: ['6.2.0.2000', '5.1.9.1900', '4.0.8.1800'], template: 'Maxthon/{version}' },
+        cheetah: { versions: ['7.8.42.1004', '6.7.35.905', '5.6.28.806'], template: 'CMBrowser/{version}' },
+        dolphin: { versions: ['15.8.9', '14.7.8', '13.6.7'], template: 'Dolphin/{version}' },
+        duckduckgo: { versions: ['7.105.1', '6.94.0', '5.83.9'], template: 'DuckDuckGo/{version}' },
+        brave: { versions: ['1.48.171', '1.47.158', '1.46.145'], template: 'Brave/{version}' },
+        samsung: { versions: ['18.0.10.1', '17.0.9.5', '16.0.8.3'], template: 'SamsungBrowser/{version}' },
+        yandex: { versions: ['22.9.4.727', '21.8.3.615', '20.7.2.503'], template: 'YaBrowser/{version}' },
+        opera: { versions: ['84.0.4316.21', '83.0.4215.19', '82.0.4112.17'], template: 'OPR/{version}' },
+        focus: { versions: ['108.2.0', '107.1.1', '106.0.0'], template: 'Focus/{version}' },
+        tor: { versions: ['11.5.7', '10.0.13', '9.5.9'], template: 'TorBrowser/{version}' },
+        puffin: { versions: ['9.6.9.4993', '8.5.8.3882', '7.4.7.2771'], template: 'Puffin/{version}' },
+        kiwi: { versions: ['107.0.4389.105', '106.0.4389.90', '105.0.4389.75'], template: 'Kiwi/{version}' },
+        via: { versions: ['4.3.9', '3.2.8', '2.1.7'], template: 'Via/{version}' },
+        chrome: { versions: ['120.0.6099.216', '119.0.6045.163', '118.0.5993.88'], template: 'Chrome/{version}' }
+    };
+
+    const ANDROID_VERSIONS = ['13', '12', '11'];
+    const OS_VERSIONS = {
+        windows: ['12.0', '11.0', '10.0'],
+        macos: ['14.2', '13.5', '12.6'],
+        linux: ['x86_64']
+    };
+
+    function getRandom(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function generateUserAgent() {
+        const deviceType = document.getElementById('deviceType').value;
+        const brand = document.getElementById('brand').value === 'random' 
+            ? getRandom(Object.keys(DEVICES[deviceType])) 
+            : document.getElementById('brand').value;
+        const browserType = document.getElementById('browser').value;
+
+        let ua;
+        if (deviceType === 'desktop') {
+            const osBrand = getRandom(Object.keys(DEVICES.desktop));
+            const osVersion = getRandom(OS_VERSIONS[osBrand]);
+            const browser = BROWSERS[browserType];
+            const version = getRandom(browser.versions);
+
+            ua = `Mozilla/5.0 (${getRandom(DEVICES.desktop[osBrand])}) AppleWebKit/537.36 (KHTML, like Gecko) ` +
+                 `${browser.template.replace('{version}', version)} Safari/537.36`;
+        } else {
+            const model = getRandom(DEVICES[deviceType][brand]);
+            const androidVersion = getRandom(ANDROID_VERSIONS);
+            const browser = BROWSERS[browserType];
+            const version = getRandom(browser.versions);
+
+            ua = `Mozilla/5.0 (Linux; Android ${androidVersion}; ${model}) AppleWebKit/537.36 (KHTML, like Gecko) ` +
+                 `${browser.template.replace('{version}', version)} Mobile Safari/537.36`;
+        }
+
+        return ua;
+    }
+
+     function copyUA(num) {
+        const textarea = document.getElementById(`ua${num}`);
+        textarea.select();
+        document.execCommand('copy');
+
+
+        const copyBtn = document.querySelector(`.user-agent-box:nth-child(${num + 1}) .copy-btn`);
+          copyBtn.classList.add('copied')
+        copyBtn.querySelector('span').textContent = "Copied!";
+          setTimeout(() => {
+             copyBtn.classList.remove('copied');
+            copyBtn.querySelector('span').textContent = "Copy";
+
+        }, 1500);
+    }
+
+
     document.getElementById('generateBtn').addEventListener('click', () => {
-        const randomModelIndex = Math.floor(Math.random() * XIAOMI_MODELS.length);
-        const randomVersionIndex = Math.floor(Math.random() * BROMITE_VERSIONS.length);
-        const model = XIAOMI_MODELS[randomModelIndex];
-        const version1 = BROMITE_VERSIONS[randomVersionIndex];
-        const version2 = BROMITE_VERSIONS[Math.max(randomVersionIndex - 2, 0)];
-        // User-Agent 1: Most recent version
-        const userAgent1 = `Mozilla/5.0 (Linux; Android 13; ${model}) AppleWebKit/537.36 (KHTML, like Gecko) Bromite/${version1}`;
-        // User-Agent 2: 2 versions older than the first
-        const userAgent2 = `Mozilla/5.0 (Linux; Android 13; ${model}) AppleWebKit/537.36 (KHTML, like Gecko) Bromite/${version2}`;
-        // Display both User-Agents
-        document.getElementById('userAgentInput1').value = userAgent1;
-        document.getElementById('userAgentInput2').value = userAgent2;
-        const result = document.getElementById('result');
-        result.textContent = 'User-Agents generated successfully!';
-        result.className = 'result';
-        // Set a timer to clear the fields after 30 seconds
-        setTimeout(() => {
-            document.getElementById('userAgentInput1').value = '';
-            document.getElementById('userAgentInput2').value = '';
-            result.textContent = 'User-Agent fields cleared after 30 seconds.';
-            result.className = 'error';
-        }, 30000); // 30000ms = 30 seconds
+        document.getElementById('ua1').value = generateUserAgent();
+        document.getElementById('ua2').value = generateUserAgent();
+    });
+
+    // Actualizar marcas disponibles según tipo de dispositivo
+    document.getElementById('deviceType').addEventListener('change', function() {
+        const deviceType = this.value;
+        const brandSelect = document.getElementById('brand');
+        brandSelect.innerHTML = '<option value="random">🎲 Random Brand</option>';
+
+        Object.keys(DEVICES[deviceType]).forEach(brand => {
+            const option = document.createElement('option');
+            option.value = brand;
+            option.textContent = brand.charAt(0).toUpperCase() + brand.slice(1);
+            brandSelect.appendChild(option);
+        });
     });
 </script>
 </body>
